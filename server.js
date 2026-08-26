@@ -1,16 +1,29 @@
-const notes = require('./notes.js');
-var _ = require('lodash');
+const express = require('express')
+const app = express()
 
-var age = notes.age;
-var res = notes.addNumber(age, 1);
+app.get('/', function(req, res){
+    res.send('Hello world');
+})
 
-var data = ["person", "person", 1, 2, 2, 1, "name", "age", '2', "name"];
-var filer = _.uniq(data);
+app.get('/rice', (req, res) => {
+    res.send('Sure, let me bring fried rice now....');
+})
 
-console.log(filer);
+app.get('/idli', (req, res) => {
+    var custom_idli = {
+        name: 'rava idli',
+        size: '10 cm daimeter',
+        is_sambhar: true,
+        is_chutney: false
+    }
+    res.send(custom_idli);
+})
 
+app.post('/items', (req, res) => {
+    res.send("Data is saved");
+})
 
-// console.log(age);
-// console.log('Result is now ' + res);
-
-
+app.listen(3000, () => {
+    console.log("server is running, litsening on port 3000");
+    
+});
