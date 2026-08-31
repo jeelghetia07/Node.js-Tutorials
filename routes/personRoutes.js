@@ -44,6 +44,47 @@ router.get('/:workType', async (req, res) => {
         console.log(err);
         res.status(500).json({err: "Internal Server Error"});
     }
-})
+});
+
+router.put('/:id', async (req, res) => {
+    try{
+        const personId = req.params.id;         // extract the id from the URL paramater.
+        const updatedPersonData = req.body;
+
+        const updatedPerson = await Person.findByIdAndUpdate(personId, updatedPersonData, {
+            new: true,      // return the updated document.
+            runValidators: true,    // run the mongoose validation.
+        })
+
+        if(!updatedPerson){
+            return res.status(404).json({error: "Person not found"});
+        }
+
+        console.log('data updated');
+        res.status(200).json(updatedPerson);
+    }catch(err){
+        console.log(err);
+        res.status(500).json({err: "Internal Server Error"});
+    }
+});
+
+
+router.delete('/:id', async (req, res) => {
+    try{
+        const personId = req.params.id;
+        
+        // Asume you have a Person Model.
+        const resp = await Person.findByIdAndDelete(personId);
+        if(!resp){
+            return res.status(404).json({error: "Person not found"});
+        }
+
+        console.log('data deleted');
+        res.status(200).json({message: "Person deleted Success"});
+    }catch(err){
+        console.log(err);
+        res.status(500).json({err: "Internal Server Error"});
+    }
+});
 
 module.exports = router
