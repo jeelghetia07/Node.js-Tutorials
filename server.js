@@ -2,6 +2,7 @@ const express = require('express')
 const app = express()
 const db = require('./db');
 const { model } = require('mongoose');
+require('dotenv').config();
 
 const Person = require('./models/person');
 const menuItem = require('./models/menuItem');
@@ -125,6 +126,8 @@ app.use('/person', personRoutes);
 
 const menuItemRoutes = require('./routes/menuItemRoutes');
 app.use('/menu', menuItemRoutes);
+
+const PORT = process.env.PORT || 3000
 
 app.listen(3000, () => {
     console.log("server is running, litsening on port 3000");
