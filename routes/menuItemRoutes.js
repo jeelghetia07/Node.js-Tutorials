@@ -48,10 +48,40 @@ router.get('/:taste', async (req, res) => {
 
 router.put('/:id', async (req, res) =>{
     try{
-        
+        const menuId = req.params.id;
+        const updateItemData = req.body;
+
+        const resp = await MenuItem.findByIdAndUpdate(menuId, updateItemData, {
+            new: true,      // return the updated doucment.
+            runValidators: true,        // run all the schema things.
+        });
+
+        if(!resp){
+            return res.status(404).json({error: "Item not found"});
+        }
+
+        console.log('item updated');
+        res.status(200).json(resp);
     }catch(err){
 
     }
-})
+});
+
+router.delete('/:id', async (req, res) => {
+    try{
+        const menuId = req.params.id;
+        const resp = await MenuItem.findByIdAndDelete(menuId);
+
+        if(!resp){
+            return res.status(404).json({message: "Menu not found"});
+        }
+
+        console.log('Item deleted');
+        res.status(200).json(resp);
+    }catch(err){
+        console.log(err);
+        res.status(500).json({err: "Intermal server error"});
+    }
+});
 
 module.exports = router;
