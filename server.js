@@ -129,6 +129,6 @@ app.use('/menu', menuItemRoutes);
 
 const PORT = process.env.PORT || 3000
 
-app.listen(PORT, () => {
-    console.log("server is running, litsening on port 3000");
+app.listen(PORT, '0.0.0.0' ,() => {
+    console.log(`server is running, litsening on port ${PORT}`)
 });
