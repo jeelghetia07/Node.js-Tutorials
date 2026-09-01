@@ -1,0 +1,28 @@
+{
+  "name": "node.js-tutorials",
+  "version": "1.0.0",
+  "description": "node js tutorial to learn backend",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jeelghetia07/Node.js-Tutorials.git"
+  },
+  "author": "jeel ghetia",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jeelghetia07/Node.js-Tutorials/issues"
+  },
+  "homepage": "https://github.com/jeelghetia07/Node.js-Tutorials#readme",
+  "dependencies": {
+    "body-parser": "^2.3.0",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "lodash": "^4.18.1",
+    "mongodb": "^7.6.0",
+    "mongoose": "^9.9.4",
+    "nodemon": "^3.1.14"
+  }
+}
