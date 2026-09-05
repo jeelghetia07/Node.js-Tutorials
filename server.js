@@ -3,16 +3,53 @@ const app = express()
 const db = require('./db');
 const { model } = require('mongoose');
 require('dotenv').config();
+const passport = require('passport');
+const LocalStrategy = require('passport-local').Strategy;
 
 const Person = require('./models/person');
 const menuItem = require('./models/menuItem');
+
+const PORT = process.env.PORT || 3000
 
 const bodyParser = require('body-parser');
 app.use(bodyParser.json());     // req.body;
 
 app.use(express.json());
 
-app.get('/', function(req, res){
+// Middleware function
+const logRequest = (req, res, next) => {
+    console.log(`${new Date().toLocaleString()} Request Made to : ${req.originalUrl}`);
+    next();         // move on to the next phase
+}
+
+app.use(logRequest);
+
+
+passport.use(new LocalStrategy (async (USERNAME, PASSWORD, done) => {
+    try{
+        console.log('Received credentials : ', USERNAME, PASSWORD);
+        const user = await Person.findOne({username: USERNAME});          // this means, if it finds in the DB then, is username == USERNAME ???
+
+        if(!user){
+            return done(null, false, {message: "Incorrect Username"});
+        }
+
+        const isPasswordMatched = user.password === PASSWORD ? true : false;
+        if(isPasswordMatched){
+            return done(null, user);
+        }
+        else{
+            return done(null, false, {message : "Password not valid"});
+        }
+    }catch(err){
+        return done(err);
+    }
+}));
+
+app.use(passport.initialize());
+const localAuthMiddleware = passport.authenticate('local', {session: false});
+// now here we implement authentication
+app.get('/', localAuthMiddleware , function(req, res){
     res.send('Welcome to our Hotel');
 })
 
@@ -125,9 +162,7 @@ const personRoutes = require('./routes/personRoutes');
 app.use('/person', personRoutes);
 
 const menuItemRoutes = require('./routes/menuItemRoutes');
-app.use('/menu', menuItemRoutes);
-
-const PORT = process.env.PORT || 3000
+app.use('/menu', localAuthMiddleware, menuItemRoutes);
 
 app.listen(PORT, '0.0.0.0' ,() => {
     console.log(`server is running, litsening on port ${PORT}`)
